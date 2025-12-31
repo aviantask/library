@@ -14,7 +14,7 @@ A local library system, with the following features:
 ### Book data
 A separate pipeline exists for loading books into the library. 
 A file is created with ISBNs, which a script will parse and work with. 
-The ingestion script will perform a lookup on the ISBN using www.librarything.com and extract the following:
+The ingestion script will perform a lookup on the ISBN using OpenLibrary API and extract the following:
 * Title
 * Author(s)
 * Author information
@@ -22,7 +22,7 @@ The ingestion script will perform a lookup on the ISBN using www.librarything.co
 * Classification, as per DDC/MDS
 
 This info is scraped rather than found via API because I can't find APIs that offer all this info. 
-The script rate limits itself to not overwhelm the librarything server. 
+The script rate limits itself to not overwhelm the OpenLibrary server. 
 
 ### Book databse
 Canonical book data, as described above, is inserted into a database.
