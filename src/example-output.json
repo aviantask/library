@@ -1,0 +1,89 @@
+[
+  {
+    "isbn": "978-1784971625",
+    "title": "Death's End",
+    "authors": [
+      "\u5218\u6148\u6b23",
+      "Ken Liu"
+    ],
+    "publication_date": "2016",
+    "publishers": [
+      "Head of Zeus"
+    ],
+    "description": "Soon to be a Netflix Original Series!\r\n\r\n\u201cThe War of the Worlds for the 21st century\u2026 packed with a sense of wonder.\u201d \u2013 Wall Street Journal\r\n\r\nThe New York Times bestselling conclusion to a tour de force near-future adventure trilogy from China's bestselling and beloved science fiction writer.\r\n\r\nWith The Three-Body Problem, English-speaking readers got their first chance to read China's most beloved science fiction author, Cixin Liu. The Three-Body Problem was released to great acclaim including coverage in The New York Times and The Wall Street Journal and reading list picks by Barack Obama and Mark Zuckerberg. It was also won the Hugo and Nebula Awards, making it the first translated novel to win a major SF award.\r\n\r\nNow this epic trilogy concludes with Death's End. Half a century after the Doomsday Battle, the uneasy balance of Dark Forest Deterrence keeps the Trisolaran invaders at bay. Earth enjoys unprecedented prosperity due to the infusion of Trisolaran knowledge. With human science advancing daily and the Trisolarans adopting Earth culture, it seems that the two civilizations will soon be able to co-exist peacefully as equals without the terrible threat of mutually assured annihilation. But the peace has also made humanity complacent.\r\n\r\nCheng Xin, an aerospace engineer from the early twenty-first century, awakens from hibernation in this new age. She brings with her knowledge of a long-forgotten program dating from the beginning of the Trisolar Crisis, and her very presence may upset the delicate balance between two worlds. Will humanity reach for the stars or die in its cradle?",
+    "first_sentence": "",
+    "subjects": [
+      "Fiction",
+      "Science Fiction",
+      "Fiction, science fiction, general",
+      "Human-alien encounters",
+      "Imaginary wars and battles",
+      "Fiction, science fiction, action & adventure",
+      "Chinese Science fiction",
+      "Survival",
+      "Extraterrestrial beings",
+      "Hard Science Fiction",
+      "Alien Contact",
+      "FICTION / Science Fiction / Hard Science Fiction",
+      "FICTION / Science Fiction / Alien Contact"
+    ],
+    "classification": {
+      "ddc": [],
+      "lcc": []
+    },
+    "number_of_pages": null,
+    "covers": [],
+    "open_library_key": "/books/OL36217358M"
+  },
+  {
+    "isbn": "9780099444961",
+    "title": "Six Degrees",
+    "authors": [
+      "Duncan J. Watts"
+    ],
+    "publication_date": "May 6, 2004",
+    "publishers": [
+      "Vintage"
+    ],
+    "description": "An architect of network theory summarizes his team's endeavor to create a blueprint of the world's networks, citing the scientific elements of the Internet, economies, terrorist organizations, and other knowledge-based groups.",
+    "first_sentence": "THE SUMMER OF 1996 WAS A SIZZLER.",
+    "subjects": [
+      "Mathematical models",
+      "Network analysis (Planning)",
+      "Graph theory",
+      "Social networks",
+      "Science, philosophy",
+      "System theory",
+      "Netwerken",
+      "Topologie",
+      "Dynamische systemen",
+      "Grafentheorie",
+      "Mathematisches Modell",
+      "Netzwerk",
+      "Soziales Netzwerk",
+      "Netzwerk (Graphentheorie)",
+      "Social networks--mathematical models",
+      "Qa166 .w37 2004x",
+      "Community Networks",
+      "Trends",
+      "Economics",
+      "Computer Communication Networks",
+      "Information Dissemination",
+      "Epidemiologic Studies",
+      "Statistics as Topic"
+    ],
+    "classification": {
+      "ddc": [
+        "511/.5"
+      ],
+      "lcc": [
+        "QA166 .W37 2003"
+      ]
+    },
+    "number_of_pages": 368,
+    "covers": [
+      74664
+    ],
+    "open_library_key": "/books/OL7318082M"
+  }
+]
