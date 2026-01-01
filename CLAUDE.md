@@ -1,7 +1,7 @@
 # Purpose
 A local library system, with the following features:
 * Ingest library books into the system via their ISBN
-    * Ingested books are inserted into a database with (at least) title, author, publication year, topic (Dewey system)
+    * Ingested books are inserted into a database with (at least) title, author, publication year, topic
 * Search for books in the library
     * Search by title, author, year, or topic
     * Fuzzy-search enabled

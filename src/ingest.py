@@ -28,6 +28,8 @@ def read_isbns(filepath: str) -> list[str]:
         for line in f:
             isbn = line.strip()
             if isbn:
+                isbn = isbn.replace('-', '')
+                isbn = isbn.replace(' ', '')
                 isbns.append(isbn)
     return isbns
 
@@ -94,18 +96,6 @@ def extract_subjects(work_data: dict) -> list[str]:
     return subjects if isinstance(subjects, list) else []
 
 
-def extract_ddc(work_data: dict) -> list[str]:
-    """Extract Dewey Decimal Classification from work data."""
-    ddc = work_data.get("dewey_number", [])
-    return ddc if isinstance(ddc, list) else []
-
-
-def extract_lcc(work_data: dict) -> list[str]:
-    """Extract Library of Congress Classification from work data."""
-    lcc = work_data.get("lc_classifications", [])
-    return lcc if isinstance(lcc, list) else []
-
-
 def fetch_book_by_isbn(session: requests.Session, isbn: str) -> dict | None:
     """
     Fetch book data for a given ISBN from Open Library.
@@ -156,14 +146,7 @@ def fetch_book_by_isbn(session: requests.Session, isbn: str) -> dict | None:
         "publishers": [p.get("name", p) if isinstance(p, dict) else p
                        for p in edition.get("publishers", [])],
         "description": extract_description(work_data),
-        "first_sentence": extract_first_sentence(edition) or extract_first_sentence(work_data),
         "subjects": extract_subjects(work_data),
-        "classification": {
-            "ddc": extract_ddc(work_data),
-            "lcc": extract_lcc(work_data) or edition.get("lc_classifications", []),
-        },
-        "number_of_pages": edition.get("number_of_pages"),
-        "covers": edition.get("covers", []),
         "open_library_key": edition.get("key"),
     }
 
@@ -173,7 +156,7 @@ def fetch_book_by_isbn(session: requests.Session, isbn: str) -> dict | None:
 def main():
     """Main entry point for the ingestion script."""
     isbn_file = Path(__file__).parent / "data" / "isbn.txt"
-    output_file = Path(__file__).parent / "example-output.json"
+    output_file = Path(__file__).parent / "data" / "output.json"
 
     isbns = read_isbns(isbn_file)
     print(f"Found {len(isbns)} ISBNs to process")
