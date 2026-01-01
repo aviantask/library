@@ -46,4 +46,5 @@
   - Extension tracking
 - [ ] Create borrowing records in database
 - [ ] Implement return and extension workflows
+- [ ] Adjust due date when extension is granted (via application logic, outside DB)
 - [ ] Display borrowing history and status in UI
