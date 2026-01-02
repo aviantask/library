@@ -18,3 +18,20 @@ python3 src/ingest.py
 ```
 
 Output will be written to `src/example-output.json`.
+
+## Search
+
+Search the library by title, author, subject, or year:
+
+```bash
+python3 src/search.py title "tale"
+python3 src/search.py author "orwell"
+python3 src/search.py subject "science"
+python3 src/search.py year 2013
+```
+
+Pipe to `less` for paging large result sets:
+
+```bash
+python3 src/search.py subject "fiction" | less
+```
