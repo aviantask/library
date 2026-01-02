@@ -171,7 +171,7 @@ class LibraryUI:
         while True:
             self.stdscr.clear()
             self.draw_header()
-            self.draw_footer(" [↑/↓] Scroll  [Enter/Q] Back to menu ")
+            self.draw_footer(" [↑/↓] Scroll  [u/d] Half-page  [Enter/Q] Back ")
 
             height, width = self.stdscr.getmaxyx()
             visible_lines = height - 3  # Account for header and footer
@@ -205,6 +205,10 @@ class LibraryUI:
                 scroll_pos = max(0, scroll_pos - visible_lines)
             elif key == curses.KEY_NPAGE:  # Page Down
                 scroll_pos = min(len(lines) - visible_lines, scroll_pos + visible_lines)
+            elif key == ord('u'):  # Half-page up
+                scroll_pos = max(0, scroll_pos - visible_lines // 2)
+            elif key == ord('d'):  # Half-page down
+                scroll_pos = min(len(lines) - visible_lines, scroll_pos + visible_lines // 2)
             elif key in (curses.KEY_ENTER, 10, 13, ord('q'), ord('Q')):
                 return
 

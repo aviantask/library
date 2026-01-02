@@ -46,7 +46,8 @@ python3 src/ui.py
 
 Controls:
 - `↑/↓` - Navigate menu / scroll results
+- `u/d` - Scroll results by half-page
+- `PgUp/PgDn` - Scroll results by full page
 - `Enter` - Select option
-- `PgUp/PgDn` - Scroll results by page
 - `Esc` - Cancel input
 - `Q` - Quit / return to menu
