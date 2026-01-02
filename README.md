@@ -35,3 +35,18 @@ Pipe to `less` for paging large result sets:
 ```bash
 python3 src/search.py subject "fiction" | less
 ```
+
+## Terminal UI
+
+Launch the interactive catalog browser:
+
+```bash
+python3 src/ui.py
+```
+
+Controls:
+- `↑/↓` - Navigate menu / scroll results
+- `Enter` - Select option
+- `PgUp/PgDn` - Scroll results by page
+- `Esc` - Cancel input
+- `Q` - Quit / return to menu
