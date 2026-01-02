@@ -52,7 +52,7 @@ class LibraryUI:
     def draw_footer(self, message=""):
         """Draw the footer bar with optional message."""
         height, width = self.stdscr.getmaxyx()
-        footer = message or " [Q]uit "
+        footer = message or ""
         self.stdscr.attron(curses.color_pair(2))
         self.stdscr.addstr(height - 1, 0, " " * (width - 1))
         self.stdscr.addstr(height - 1, 0, footer[:width - 1])
@@ -74,7 +74,6 @@ class LibraryUI:
         menu_items.append(("_browse_header", "── Browse ──"))
         menu_items.extend(BROWSE_OPTIONS)
 
-        menu_items.append(("quit", "Quit"))
 
         # Find selectable items (skip headers)
         selectable = [i for i, (key, _) in enumerate(menu_items) if not key.startswith("_")]
@@ -83,7 +82,7 @@ class LibraryUI:
         while True:
             self.stdscr.clear()
             self.draw_header()
-            self.draw_footer(" [↑/↓] Navigate  [Enter] Select  [Q] Quit ")
+            self.draw_footer(" [↑/↓] Navigate  [Enter] Select ")
 
             height, width = self.stdscr.getmaxyx()
             start_y = 3
@@ -119,8 +118,6 @@ class LibraryUI:
                     selected = selectable[curr_idx + 1]
             elif ch in (curses.KEY_ENTER, 10, 13):
                 return menu_items[selected][0]
-            elif ch in (ord('q'), ord('Q')):
-                return "quit"
 
     def get_search_input(self, field: str) -> str | None:
         """Prompt user for search term. Returns None if cancelled."""
@@ -244,9 +241,7 @@ class LibraryUI:
         while True:
             choice = self.show_main_menu()
 
-            if choice == "quit":
-                break
-            elif choice == "repeat":
+            if choice == "repeat":
                 if self.last_search:
                     field, term = self.last_search
                     self.do_search(field, term)
