@@ -1,4 +1,18 @@
-# Setup
+# Library
+
+A personal library management system for cataloging physical books, searching the collection, and tracking borrowers. Designed with a retro green-screen terminal UI for a dedicated Linux machine.
+
+## Features
+
+- **ISBN-based ingestion** - Add books by ISBN, automatically fetch metadata from OpenLibrary
+- **Full-text search** - Search by title, author, subject, or publication year with fuzzy matching
+- **Terminal UI** - Retro green-screen interface for browsing and searching the catalog
+- **Borrower tracking** - Track who borrowed what and when (planned)
+- **Multi-machine deployment** - Develop on Mac, deploy to dedicated Linux terminal
+
+## Quick Start
+
+### Setup
 
 ```bash
 # Create virtual environment
@@ -9,7 +23,7 @@ source venv/bin/activate
 pip install -r requirements.txt
 ```
 
-# Usage
+### Ingesting Books
 
 Add ISBNs to `src/data/isbn.txt` (one per line), then run:
 
@@ -17,11 +31,11 @@ Add ISBNs to `src/data/isbn.txt` (one per line), then run:
 python3 src/ingest.py
 ```
 
-Output will be written to `src/example-output.json`.
+Book data is saved to the SQLite database at `src/db/library.db`.
 
-## Search
+### Searching
 
-Search the library by title, author, subject, or year:
+Search from the command line:
 
 ```bash
 python3 src/search.py title "tale"
@@ -30,13 +44,13 @@ python3 src/search.py subject "science"
 python3 src/search.py year 2013
 ```
 
-Pipe to `less` for paging large result sets:
+Pipe to `less` for large result sets:
 
 ```bash
 python3 src/search.py subject "fiction" | less
 ```
 
-## Terminal UI
+### Terminal UI
 
 Launch the interactive catalog browser:
 
@@ -44,81 +58,36 @@ Launch the interactive catalog browser:
 python3 src/ui.py
 ```
 
-Controls:
+**Controls:**
 - `↑/↓` - Navigate menu / scroll results
-- `u/d` - Scroll results by half-page
-- `PgUp/PgDn` - Scroll results by full page
+- `u/d` - Scroll by half-page
+- `PgUp/PgDn` - Scroll by full page
 - `Enter` - Select option
 - `Esc` - Cancel input
 - `Q` - Quit / return to menu
 
-# Deploying to ui-box
+## Architecture
 
-The library UI runs on a separate Linux machine (ui-box) that hosts its own copy of the database. The Mac is used for development and book ingestion, with updates pushed via SSH.
+The system has two main components:
 
-## Initial Setup (one-time)
+**Ingestion Pipeline** - Runs on your development machine (Mac). Looks up book metadata via OpenLibrary API, scrapes additional details like Dewey Decimal classification, and stores everything in a SQLite database with full-text search.
 
-### 1. Install SSH server on ui-box
-```bash
-# On ui-box
-sudo apt install openssh-server
-```
+**UI Terminal** - Runs on a dedicated Linux box (`ui-box`) configured with auto-login to a `guest` user that launches the library UI on boot. Think library catalog terminal at your local library, but at home.
 
-### 2. Set up SSH key access from Mac
-```bash
-# On Mac - generate key if needed
-ssh-keygen -t ed25519 -C "library-deploy"
+See [CLAUDE.md](CLAUDE.md) for detailed architecture and component descriptions.
 
-# Copy key to ui-box
-ssh-copy-id libraryadmin@<ui-box-ip>
-```
+## Deployment
 
-### 3. Add SSH config for convenience
-Add to `~/.ssh/config` on Mac:
-```
-Host ui-box
-    HostName <ui-box-ip-or-hostname>
-    User libraryadmin
-```
+The library is designed to run on a separate Linux machine (`ui-box`) that boots directly into the catalog interface.
 
-### 4. Create directory structure on ui-box
-```bash
-ssh ui-box 'sudo mkdir -p /home/guest/library/db && sudo chown -R guest:guest /home/guest/library'
-```
+For deployment instructions:
+- **Initial setup**: See [docs/ui-box-setup.md](docs/ui-box-setup.md) for setting up the Linux machine
+- **Ongoing deployment**: See [docs/deployment.md](docs/deployment.md) for pushing updates and new books
 
-### 5. Run initial deployment
-```bash
-./scripts/full-sync.sh
-```
+## Development
 
-### 6. Set up Python environment on ui-box
-```bash
-ssh ui-box 'sudo -u guest bash -c "cd /home/guest/library && python3 -m venv venv && source venv/bin/activate && pip install requests beautifulsoup4"'
-```
+This is a Python codebase following two principles:
+1. **Clarity above all else**
+2. **After clarity, simplicity above all else**
 
-### 7. Test the UI
-```bash
-ssh ui-box 'sudo -u guest bash -c "cd /home/guest/library && source venv/bin/activate && python3 ui.py"'
-```
-
-For detailed Linux installation instructions, see [docs/ui-box-setup.md](docs/ui-box-setup.md).
-
-## Ongoing Workflow
-
-After ingesting new books on Mac:
-```bash
-./scripts/push-books.sh
-```
-
-After changing code on Mac:
-```bash
-./scripts/deploy.sh
-```
-
-## Deploy Scripts
-
-| Script | Purpose |
-|--------|---------|
-| `scripts/push-books.sh` | Push newly ingested books (additive, safe) |
-| `scripts/deploy.sh` | Deploy code changes (ui.py, search.py) |
-| `scripts/full-sync.sh` | Full sync with confirmation (overwrites DB)
+No fancy abstractions. No over-engineering. Just straightforward, readable code.

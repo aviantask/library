@@ -171,7 +171,7 @@ scp src/ui.py src/search.py ui-box:/home/guest/library/
 scp -r src/db ui-box:/home/guest/library/
 
 # Set up Python venv on ui-box
-ssh ui-box 'sudo -u guest bash -c "cd /home/guest/library && python3 -m venv venv && source venv/bin/activate && pip install requests beautifulsoup4"'
+ssh ui-box 'sudo -u guest bash -c "cd /home/guest/library && python3 -m venv venv && source venv/bin/activate"'
 ```
 
 ---
