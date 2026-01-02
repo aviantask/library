@@ -200,7 +200,7 @@ def format_results(results: list[sqlite3.Row]) -> str:
         lines.append(f"Title:   {row['title']}")
         lines.append(f"Author:  {row['authors'] or 'Unknown'}")
         lines.append(f"Year:    {row['publication_year'] or 'Unknown'}")
-        lines.append(f"         {truncate_description(row['description'])}")
+        lines.append(f"Desc:    {truncate_description(row['description'])}")
         lines.append("-" * 60)
 
     return "\n".join(lines)
