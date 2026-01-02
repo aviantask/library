@@ -15,7 +15,7 @@
   - Title, author(s), publication year, topic
   - Support for storing additional metadata
 - [ ] Setup database on shared network directory
-- [ ] Create database initialization scripts
+- [x] Create database initialization scripts
 
 ### Search Functionality
 - [ ] Implement search by title
