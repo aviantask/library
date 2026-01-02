@@ -132,6 +132,121 @@ def search_by_year(conn: sqlite3.Connection, year: int) -> list[sqlite3.Row]:
     return conn.execute(query, (year,)).fetchall()
 
 
+def browse_by_title(conn: sqlite3.Connection) -> list[sqlite3.Row]:
+    """Return all books ordered alphabetically by title."""
+    query = """
+        SELECT
+            b.id,
+            b.isbn,
+            b.title,
+            b.publication_year,
+            GROUP_CONCAT(DISTINCT a.name) AS authors,
+            GROUP_CONCAT(DISTINCT s.name) AS subjects
+        FROM books b
+        LEFT JOIN book_authors ba ON ba.book_id = b.id
+        LEFT JOIN authors a ON a.id = ba.author_id
+        LEFT JOIN book_subjects bs ON bs.book_id = b.id
+        LEFT JOIN subjects s ON s.id = bs.subject_id
+        GROUP BY b.id
+        ORDER BY b.title COLLATE NOCASE
+    """
+    return conn.execute(query).fetchall()
+
+
+def browse_by_year(conn: sqlite3.Connection) -> list[sqlite3.Row]:
+    """Return all books ordered by publication year."""
+    query = """
+        SELECT
+            b.id,
+            b.isbn,
+            b.title,
+            b.publication_year,
+            GROUP_CONCAT(DISTINCT a.name) AS authors,
+            GROUP_CONCAT(DISTINCT s.name) AS subjects
+        FROM books b
+        LEFT JOIN book_authors ba ON ba.book_id = b.id
+        LEFT JOIN authors a ON a.id = ba.author_id
+        LEFT JOIN book_subjects bs ON bs.book_id = b.id
+        LEFT JOIN subjects s ON s.id = bs.subject_id
+        GROUP BY b.id
+        ORDER BY b.publication_year, b.title COLLATE NOCASE
+    """
+    return conn.execute(query).fetchall()
+
+
+def browse_by_author(conn: sqlite3.Connection) -> list[sqlite3.Row]:
+    """Return all books ordered alphabetically by author name."""
+    query = """
+        SELECT
+            b.id,
+            b.isbn,
+            b.title,
+            b.publication_year,
+            GROUP_CONCAT(DISTINCT a.name) AS authors,
+            GROUP_CONCAT(DISTINCT s.name) AS subjects,
+            MIN(a.name) AS sort_author
+        FROM books b
+        LEFT JOIN book_authors ba ON ba.book_id = b.id
+        LEFT JOIN authors a ON a.id = ba.author_id
+        LEFT JOIN book_subjects bs ON bs.book_id = b.id
+        LEFT JOIN subjects s ON s.id = bs.subject_id
+        GROUP BY b.id
+        ORDER BY sort_author COLLATE NOCASE, b.title COLLATE NOCASE
+    """
+    return conn.execute(query).fetchall()
+
+
+def browse_by_subject(conn: sqlite3.Connection) -> list[sqlite3.Row]:
+    """Return all books ordered alphabetically by subject."""
+    query = """
+        SELECT
+            b.id,
+            b.isbn,
+            b.title,
+            b.publication_year,
+            GROUP_CONCAT(DISTINCT a.name) AS authors,
+            GROUP_CONCAT(DISTINCT s.name) AS subjects,
+            MIN(s.name) AS sort_subject
+        FROM books b
+        LEFT JOIN book_authors ba ON ba.book_id = b.id
+        LEFT JOIN authors a ON a.id = ba.author_id
+        LEFT JOIN book_subjects bs ON bs.book_id = b.id
+        LEFT JOIN subjects s ON s.id = bs.subject_id
+        GROUP BY b.id
+        ORDER BY sort_subject COLLATE NOCASE, b.title COLLATE NOCASE
+    """
+    return conn.execute(query).fetchall()
+
+
+def browse(db_path: Path | None, field: str) -> str:
+    """
+    Browse all books ordered by the specified field.
+
+    Args:
+        db_path: Path to database, or None for default.
+        field: One of 'title', 'author', 'subject', 'year'.
+
+    Returns:
+        Formatted string of results.
+    """
+    conn = get_connection(db_path)
+    try:
+        if field == "title":
+            results = browse_by_title(conn)
+        elif field == "author":
+            results = browse_by_author(conn)
+        elif field == "subject":
+            results = browse_by_subject(conn)
+        elif field == "year":
+            results = browse_by_year(conn)
+        else:
+            return f"Unknown browse field: {field}"
+
+        return format_results(results)
+    finally:
+        conn.close()
+
+
 def format_results(results: list[sqlite3.Row]) -> str:
     """Format search results for terminal display."""
     if not results:

@@ -7,17 +7,24 @@ A green-screen TUI for searching the library catalog.
 import curses
 from pathlib import Path
 
-from search import search, get_connection, search_by_title, search_by_author, search_by_subject, search_by_year, format_results
+from search import search, browse
 
 
 DB_PATH = Path(__file__).parent / "db" / "library.db"
 
 # Menu options
 SEARCH_OPTIONS = [
-    ("title", "Search by Title"),
-    ("author", "Search by Author"),
-    ("subject", "Search by Subject"),
-    ("year", "Search by Year"),
+    ("search_title", "Search by Title"),
+    ("search_author", "Search by Author"),
+    ("search_subject", "Search by Subject"),
+    ("search_year", "Search by Year"),
+]
+
+BROWSE_OPTIONS = [
+    ("browse_title", "Browse by Title"),
+    ("browse_author", "Browse by Author"),
+    ("browse_subject", "Browse by Subject"),
+    ("browse_year", "Browse by Year"),
 ]
 
 
@@ -56,14 +63,24 @@ class LibraryUI:
     def show_main_menu(self):
         """Display main menu and return selected option."""
         selected = 0
-        menu_items = SEARCH_OPTIONS.copy()
+        menu_items = []
 
         # Add repeat last search option if available
         if self.last_search:
             field, term = self.last_search
-            menu_items.insert(0, ("repeat", f"Repeat: {field} = '{term}'"))
+            menu_items.append(("repeat", f"Repeat: {field} = '{term}'"))
+
+        # Add separators and sections
+        menu_items.append(("_search_header", "── Search ──"))
+        menu_items.extend(SEARCH_OPTIONS)
+        menu_items.append(("_browse_header", "── Browse ──"))
+        menu_items.extend(BROWSE_OPTIONS)
 
         menu_items.append(("quit", "Quit"))
+
+        # Find selectable items (skip headers)
+        selectable = [i for i, (key, _) in enumerate(menu_items) if not key.startswith("_")]
+        selected = selectable[0] if selectable else 0
 
         while True:
             self.stdscr.clear()
@@ -79,23 +96,32 @@ class LibraryUI:
                 if y >= height - 2:
                     break
 
-                if i == selected:
+                if key.startswith("_"):
+                    # Section header
+                    self.stdscr.addstr(y, 2, label, curses.A_DIM)
+                elif i == selected:
                     self.stdscr.attron(curses.color_pair(2))
                     self.stdscr.addstr(y, 2, f" {label} ")
                     self.stdscr.attroff(curses.color_pair(2))
                 else:
-                    self.stdscr.addstr(y, 2, f"  {label}")
+                    self.stdscr.addstr(y, 4, label)
 
             self.stdscr.refresh()
 
-            key = self.stdscr.getch()
-            if key == curses.KEY_UP and selected > 0:
-                selected -= 1
-            elif key == curses.KEY_DOWN and selected < len(menu_items) - 1:
-                selected += 1
-            elif key in (curses.KEY_ENTER, 10, 13):
+            ch = self.stdscr.getch()
+            if ch == curses.KEY_UP:
+                # Find previous selectable item
+                curr_idx = selectable.index(selected) if selected in selectable else 0
+                if curr_idx > 0:
+                    selected = selectable[curr_idx - 1]
+            elif ch == curses.KEY_DOWN:
+                # Find next selectable item
+                curr_idx = selectable.index(selected) if selected in selectable else -1
+                if curr_idx < len(selectable) - 1:
+                    selected = selectable[curr_idx + 1]
+            elif ch in (curses.KEY_ENTER, 10, 13):
                 return menu_items[selected][0]
-            elif key in (ord('q'), ord('Q')):
+            elif ch in (ord('q'), ord('Q')):
                 return "quit"
 
     def get_search_input(self, field: str) -> str | None:
@@ -197,6 +223,18 @@ class LibraryUI:
         results_text = search(DB_PATH, field, term)
         self.show_results(results_text)
 
+    def do_browse(self, field: str):
+        """Execute browse and display results."""
+        # Show loading message
+        self.stdscr.clear()
+        self.draw_header()
+        self.stdscr.addstr(3, 2, "Loading...")
+        self.stdscr.refresh()
+
+        # Execute browse
+        results_text = browse(DB_PATH, field)
+        self.show_results(results_text)
+
     def run(self):
         """Main UI loop."""
         curses.curs_set(0)  # Hide cursor
@@ -210,10 +248,14 @@ class LibraryUI:
                 if self.last_search:
                     field, term = self.last_search
                     self.do_search(field, term)
-            elif choice in ("title", "author", "subject", "year"):
-                term = self.get_search_input(choice)
+            elif choice.startswith("search_"):
+                field = choice.replace("search_", "")
+                term = self.get_search_input(field)
                 if term:
-                    self.do_search(choice, term)
+                    self.do_search(field, term)
+            elif choice.startswith("browse_"):
+                field = choice.replace("browse_", "")
+                self.do_browse(field)
 
 
 def main(stdscr):

@@ -28,10 +28,11 @@
 - [x] Create SQL query layer for search operations
 
 ### User Interface
-- [ ] Design and implement terminal-based UI (green-screen theme)
-- [ ] Implement guest user query interface
+- [x] Design and implement terminal-based UI (green-screen theme)
+- [x] Implement guest user query interface
   - Display search results
   - Handle user input for searches
+- [x] Browse ability
 - [ ] Implement library admin user interface
   - Book checkout functionality
   - User account switching
