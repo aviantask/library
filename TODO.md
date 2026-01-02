@@ -8,7 +8,7 @@
   - Lookup books via OpenLibrary API/scraping
   - Extract title, authors, publication date, DDC classification
   - Implement rate limiting
-- [ ] Insert ingested books into database
+- [x] Insert ingested books into database
 
 ### Book Database
 - [x] Design and implement database schema
@@ -18,14 +18,14 @@
 - [x] Create database initialization scripts
 
 ### Search Functionality
-- [ ] Implement search by title
+- [x] Implement search by title
   - Include fuzzy search support
-- [ ] Implement search by author
+- [x] Implement search by author
   - Include fuzzy search support
-- [ ] Implement search by year
-- [ ] Implement search by topic
+- [x] Implement search by year
+- [x] Implement search by topic
   - Include fuzzy search support
-- [ ] Create SQL query layer for search operations
+- [x] Create SQL query layer for search operations
 
 ### User Interface
 - [ ] Design and implement terminal-based UI (green-screen theme)
