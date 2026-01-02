@@ -30,9 +30,9 @@ def search_by_title(conn: sqlite3.Connection, term: str) -> list[sqlite3.Row]:
     query = """
         SELECT
             b.id,
-            b.isbn,
             b.title,
             b.publication_year,
+            b.description,
             GROUP_CONCAT(DISTINCT a.name) AS authors
         FROM books_fts fts
         JOIN books b ON b.id = fts.rowid
@@ -56,9 +56,9 @@ def search_by_author(conn: sqlite3.Connection, term: str) -> list[sqlite3.Row]:
     query = """
         SELECT
             b.id,
-            b.isbn,
             b.title,
             b.publication_year,
+            b.description,
             GROUP_CONCAT(DISTINCT a.name) AS authors
         FROM authors_fts fts
         JOIN authors a ON a.id = fts.rowid
@@ -81,9 +81,9 @@ def search_by_year(conn: sqlite3.Connection, year: int) -> list[sqlite3.Row]:
     query = """
         SELECT
             b.id,
-            b.isbn,
             b.title,
             b.publication_year,
+            b.description,
             GROUP_CONCAT(DISTINCT a.name) AS authors
         FROM books b
         LEFT JOIN book_authors ba ON ba.book_id = b.id
@@ -100,9 +100,9 @@ def browse_by_title(conn: sqlite3.Connection) -> list[sqlite3.Row]:
     query = """
         SELECT
             b.id,
-            b.isbn,
             b.title,
             b.publication_year,
+            b.description,
             GROUP_CONCAT(DISTINCT a.name) AS authors
         FROM books b
         LEFT JOIN book_authors ba ON ba.book_id = b.id
@@ -118,9 +118,9 @@ def browse_by_year(conn: sqlite3.Connection) -> list[sqlite3.Row]:
     query = """
         SELECT
             b.id,
-            b.isbn,
             b.title,
             b.publication_year,
+            b.description,
             GROUP_CONCAT(DISTINCT a.name) AS authors
         FROM books b
         LEFT JOIN book_authors ba ON ba.book_id = b.id
@@ -136,9 +136,9 @@ def browse_by_author(conn: sqlite3.Connection) -> list[sqlite3.Row]:
     query = """
         SELECT
             b.id,
-            b.isbn,
             b.title,
             b.publication_year,
+            b.description,
             GROUP_CONCAT(DISTINCT a.name) AS authors,
             MIN(a.name) AS sort_author
         FROM books b
@@ -177,6 +177,16 @@ def browse(db_path: Path | None, field: str) -> str:
         conn.close()
 
 
+def truncate_description(desc: str | None, max_len: int = 100) -> str:
+    """Truncate description to fit terminal display."""
+    if not desc:
+        return "No description available"
+    desc = desc.strip()
+    if len(desc) <= max_len:
+        return desc
+    return desc[:max_len].rsplit(" ", 1)[0] + "..."
+
+
 def format_results(results: list[sqlite3.Row]) -> str:
     """Format search results for terminal display."""
     if not results:
@@ -190,7 +200,7 @@ def format_results(results: list[sqlite3.Row]) -> str:
         lines.append(f"Title:   {row['title']}")
         lines.append(f"Author:  {row['authors'] or 'Unknown'}")
         lines.append(f"Year:    {row['publication_year'] or 'Unknown'}")
-        lines.append(f"ISBN:    {row['isbn']}")
+        lines.append(f"         {truncate_description(row['description'])}")
         lines.append("-" * 60)
 
     return "\n".join(lines)
