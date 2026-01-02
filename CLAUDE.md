@@ -47,3 +47,7 @@ There is are only two principles the codebase follows religiously:
 1. Clarity of code above all else.
 2. After clarify, simplicity above all else. 
 
+Source files live in `./src`. The project uses a python venv so don't bother looking for source files at the project root, or alternatively you should exclude files in `./venv`.
+Documentation is in README.md and `./docs`
+Scripts are in `./scripts`.
+
