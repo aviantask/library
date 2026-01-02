@@ -11,7 +11,7 @@
 - [ ] Insert ingested books into database
 
 ### Book Database
-- [ ] Design and implement database schema
+- [x] Design and implement database schema
   - Title, author(s), publication year, topic
   - Support for storing additional metadata
 - [ ] Setup database on shared network directory
