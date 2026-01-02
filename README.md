@@ -83,7 +83,7 @@ Host ui-box
 
 ### 4. Create directory structure on ui-box
 ```bash
-ssh ui-box 'mkdir -p ~/library/db'
+ssh ui-box 'sudo mkdir -p /home/guest/library/db && sudo chown -R guest:guest /home/guest/library'
 ```
 
 ### 5. Run initial deployment
@@ -93,13 +93,15 @@ ssh ui-box 'mkdir -p ~/library/db'
 
 ### 6. Set up Python environment on ui-box
 ```bash
-ssh ui-box 'cd ~/library && python3 -m venv venv && source venv/bin/activate && pip install requests beautifulsoup4'
+ssh ui-box 'sudo -u guest bash -c "cd /home/guest/library && python3 -m venv venv && source venv/bin/activate && pip install requests beautifulsoup4"'
 ```
 
 ### 7. Test the UI
 ```bash
-ssh ui-box 'cd ~/library && source venv/bin/activate && python3 ui.py'
+ssh ui-box 'sudo -u guest bash -c "cd /home/guest/library && source venv/bin/activate && python3 ui.py"'
 ```
+
+For detailed Linux installation instructions, see [docs/ui-box-setup.md](docs/ui-box-setup.md).
 
 ## Ongoing Workflow
 

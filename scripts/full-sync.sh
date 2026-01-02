@@ -16,10 +16,12 @@ if [[ ! $REPLY =~ ^[Yy]$ ]]; then
     exit 1
 fi
 
+LIBRARY_PATH="/home/guest/library"
+
 echo "Syncing Python scripts..."
-scp src/ui.py src/search.py ui-box:~/library/
+scp src/ui.py src/search.py ui-box:$LIBRARY_PATH/
 
 echo "Syncing database..."
-scp src/db/library.db ui-box:~/library/db/
+scp src/db/library.db ui-box:$LIBRARY_PATH/db/
 
 echo "Full sync complete."
