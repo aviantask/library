@@ -90,12 +90,6 @@ def extract_first_sentence(data: dict) -> str:
     return str(first_sentence)
 
 
-def extract_subjects(work_data: dict) -> list[str]:
-    """Extract subjects from work data."""
-    subjects = work_data.get("subjects", [])
-    return subjects if isinstance(subjects, list) else []
-
-
 def fetch_book_by_isbn(session: requests.Session, isbn: str) -> dict | None:
     """
     Fetch book data for a given ISBN from Open Library.
@@ -123,10 +117,19 @@ def fetch_book_by_isbn(session: requests.Session, isbn: str) -> dict | None:
             work_data = fetch_work_data(session, work_key) or {}
 
     # Get author names
+    # Edition authors format: [{'key': '/authors/...'}]
+    # Work authors format: [{'author': {'key': '/authors/...'}}]
     authors = []
     author_keys = edition.get("authors", []) or work_data.get("authors", [])
     for author_ref in author_keys:
-        author_key = author_ref.get("key") if isinstance(author_ref, dict) else None
+        if not isinstance(author_ref, dict):
+            continue
+        # Handle work-level format (nested under 'author' key)
+        if "author" in author_ref:
+            author_key = author_ref["author"].get("key")
+        else:
+            # Handle edition-level format (direct 'key')
+            author_key = author_ref.get("key")
         if author_key:
             time.sleep(RATE_LIMIT_SECONDS)
             author_data = fetch_author_data(session, author_key)
@@ -146,7 +149,6 @@ def fetch_book_by_isbn(session: requests.Session, isbn: str) -> dict | None:
         "publishers": [p.get("name", p) if isinstance(p, dict) else p
                        for p in edition.get("publishers", [])],
         "description": extract_description(work_data),
-        "subjects": extract_subjects(work_data),
         "open_library_key": edition.get("key"),
     }
 

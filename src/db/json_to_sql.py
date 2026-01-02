@@ -68,18 +68,6 @@ def generate_book_sql(book: dict) -> list[str]:
             f"WHERE b.isbn = '{isbn}' AND a.name = '{author_escaped}';"
         )
 
-    # Insert subjects and link to book
-    for subject in book.get("subjects", []):
-        subject_escaped = escape_sql(subject)
-        statements.append(
-            f"INSERT OR IGNORE INTO subjects (name) VALUES ('{subject_escaped}');"
-        )
-        statements.append(
-            f"INSERT OR IGNORE INTO book_subjects (book_id, subject_id) "
-            f"SELECT b.id, s.id FROM books b, subjects s "
-            f"WHERE b.isbn = '{isbn}' AND s.name = '{subject_escaped}';"
-        )
-
     # Insert publishers and link to book
     for publisher in book.get("publishers", []):
         publisher_escaped = escape_sql(publisher)

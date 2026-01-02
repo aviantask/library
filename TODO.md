@@ -12,7 +12,7 @@
 
 ### Book Database
 - [x] Design and implement database schema
-  - Title, author(s), publication year, topic
+  - Title, author(s), publication year
   - Support for storing additional metadata
 - [ ] Setup database on shared network directory
 - [x] Create database initialization scripts
@@ -23,8 +23,6 @@
 - [x] Implement search by author
   - Include fuzzy search support
 - [x] Implement search by year
-- [x] Implement search by topic
-  - Include fuzzy search support
 - [x] Create SQL query layer for search operations
 
 ### User Interface

@@ -1,9 +1,9 @@
 # Purpose
 A local library system, with the following features:
 * Ingest library books into the system via their ISBN
-    * Ingested books are inserted into a database with (at least) title, author, publication year, topic
+    * Ingested books are inserted into a database with (at least) title, author, publication year
 * Search for books in the library
-    * Search by title, author, year, or topic
+    * Search by title, author, or year
     * Fuzzy-search enabled
 * Check books out
     * Books can be "borrowed", i.e. given to someone who takes them out of the home
@@ -34,7 +34,7 @@ The UI lives on an old machine running Linux without a graphical display.
 
 ## Queries
 The UI loads into a `guest` user account that has the ability to query the library. 
-The queries, e.g by author or subject, issue SQL queries against the database and display the results. 
+The queries, e.g by author or year, issue SQL queries against the database and display the results. 
 The entire UI is green-screen, because that's the vibe I'm after. 
 
 ## Borrowing

@@ -25,12 +25,6 @@ CREATE TABLE authors (
     name TEXT UNIQUE NOT NULL
 );
 
--- Subjects (topics)
-CREATE TABLE subjects (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    name TEXT UNIQUE NOT NULL
-);
-
 -- Publishers
 CREATE TABLE publishers (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -47,14 +41,6 @@ CREATE TABLE book_authors (
     PRIMARY KEY (book_id, author_id),
     FOREIGN KEY (book_id) REFERENCES books(id) ON DELETE CASCADE,
     FOREIGN KEY (author_id) REFERENCES authors(id) ON DELETE CASCADE
-);
-
-CREATE TABLE book_subjects (
-    book_id INTEGER NOT NULL,
-    subject_id INTEGER NOT NULL,
-    PRIMARY KEY (book_id, subject_id),
-    FOREIGN KEY (book_id) REFERENCES books(id) ON DELETE CASCADE,
-    FOREIGN KEY (subject_id) REFERENCES subjects(id) ON DELETE CASCADE
 );
 
 CREATE TABLE book_publishers (
@@ -118,13 +104,6 @@ CREATE VIRTUAL TABLE authors_fts USING fts5(
     content_rowid='id'
 );
 
--- Full-text search on subject names
-CREATE VIRTUAL TABLE subjects_fts USING fts5(
-    name,
-    content='subjects',
-    content_rowid='id'
-);
-
 -- =============================================================================
 -- TRIGGERS to keep FTS tables synchronized
 -- =============================================================================
@@ -157,16 +136,3 @@ CREATE TRIGGER authors_fts_update AFTER UPDATE ON authors BEGIN
     INSERT INTO authors_fts(rowid, name) VALUES (new.id, new.name);
 END;
 
--- Subjects FTS triggers
-CREATE TRIGGER subjects_fts_insert AFTER INSERT ON subjects BEGIN
-    INSERT INTO subjects_fts(rowid, name) VALUES (new.id, new.name);
-END;
-
-CREATE TRIGGER subjects_fts_delete AFTER DELETE ON subjects BEGIN
-    INSERT INTO subjects_fts(subjects_fts, rowid, name) VALUES('delete', old.id, old.name);
-END;
-
-CREATE TRIGGER subjects_fts_update AFTER UPDATE ON subjects BEGIN
-    INSERT INTO subjects_fts(subjects_fts, rowid, name) VALUES('delete', old.id, old.name);
-    INSERT INTO subjects_fts(rowid, name) VALUES (new.id, new.name);
-END;

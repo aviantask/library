@@ -5,7 +5,7 @@ A personal library management system for cataloging physical books, searching th
 ## Features
 
 - **ISBN-based ingestion** - Add books by ISBN, automatically fetch metadata from OpenLibrary
-- **Full-text search** - Search by title, author, subject, or publication year with fuzzy matching
+- **Full-text search** - Search by title, author, or publication year with fuzzy matching
 - **Terminal UI** - Retro green-screen interface for browsing and searching the catalog
 - **Borrower tracking** - Track who borrowed what and when (planned)
 - **Multi-machine deployment** - Develop on Mac, deploy to dedicated Linux terminal
@@ -40,14 +40,7 @@ Search from the command line:
 ```bash
 python3 src/search.py title "tale"
 python3 src/search.py author "orwell"
-python3 src/search.py subject "science"
 python3 src/search.py year 2013
-```
-
-Pipe to `less` for large result sets:
-
-```bash
-python3 src/search.py subject "fiction" | less
 ```
 
 ### Terminal UI

@@ -16,14 +16,12 @@ DB_PATH = Path(__file__).parent / "db" / "library.db"
 SEARCH_OPTIONS = [
     ("search_title", "Search by Title"),
     ("search_author", "Search by Author"),
-    ("search_subject", "Search by Subject"),
     ("search_year", "Search by Year"),
 ]
 
 BROWSE_OPTIONS = [
     ("browse_title", "Browse by Title"),
     ("browse_author", "Browse by Author"),
-    ("browse_subject", "Browse by Subject"),
     ("browse_year", "Browse by Year"),
 ]
 
